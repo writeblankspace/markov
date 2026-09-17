@@ -10,6 +10,24 @@ A Blagh:
 - May not follow grammar rules of any language
 - Can be absolute nonsense
 
+> [!IMPORTANT]
+> 
+> Not all features detailed in this README have been implemented yet.
+> 
+> Check the [Todo](#todo) at the end of this document to see what I plan on adding.
+
+## Setup
+
+I am programming this on NixOS, so you will find a list of dependencies in [`shell.nix`](./shell.nix).
+
+This project requires a Discord bot token in an `.env` file.
+
+```shell
+export DISCORD_TOKEN="paste_your_token_here"
+```
+
+It will write into an SQLite database file `markov.db`.
+
 ## Chain
 
 Used in building Blaghs.
@@ -45,6 +63,8 @@ Where `n` is the position of the word to be added next.
 > Thus, there is a 3/4 chance that we will get the string, `"the quick brown"`.
 
 The bot uses a 1.5:1 ratio, meaning results matching both `word1` and `word2` will be weighted more than results matching only `word2`.
+
+You can understand my implementation better by checking out [`modules.blagh.get_next()`](./modules/blagh.py).
 
 ## Response
 
@@ -141,8 +161,6 @@ The Blagh is started off with a random `next`, with the number of points given c
 ## Todo
 
 - [x] Ignore @mentions, @everyone and URLs
-- [ ] Set status
-- [ ] Use slash commands
 - [x] Reduce ratio to 1.5:1
     - considers `word2` matches, not just `word1` AND `word2`
 - [x] More efficient way of picking a random item based on weight
@@ -150,3 +168,5 @@ The Blagh is started off with a random `next`, with the number of points given c
     - [ ] Important words
     - [ ] Training
     - [ ] Responding
+- [ ] Set status
+- [ ] Use slash commands
