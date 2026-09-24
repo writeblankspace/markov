@@ -1,6 +1,6 @@
 import sqlite3
 import random
-from typing import List, Union
+from typing import List, Dict, Union
 from collections.abc import Callable
 import f.sql
 

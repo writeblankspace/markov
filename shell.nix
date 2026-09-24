@@ -1,4 +1,6 @@
-# run nix-shell to use
+# run either:
+# $ nix-shell
+# $ echo "use nix" > .envrc && direnv allow
 let
   pkgs = import <nixpkgs> {};
 in pkgs.mkShell {
@@ -7,6 +9,7 @@ in pkgs.mkShell {
     (pkgs.python3.withPackages (python-pkgs: [
       python-pkgs.discordpy
       python-pkgs.python-dotenv
+      python-pkgs.numpy
     ]))
   ];
 }
