@@ -1,7 +1,7 @@
-# Functions used to build the SQL query 
+# Functions used to build the SQL query
 # with respect to NULL
 
-def eq(column: str, word: str) -> str:
+def eq(column: str, word: str | None) -> str:
     if word:
         return f"{column} = ?"
     else:
@@ -9,5 +9,5 @@ def eq(column: str, word: str) -> str:
         return f"{column} IS NULL"
 
 # Get rid of None in data
-def remove_none(*data: tuple[str | None]) -> tuple[str]:
+def remove_none(*data: str | None) -> tuple[str, ...]:
     return tuple([x for x in data if x])

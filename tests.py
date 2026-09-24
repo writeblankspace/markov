@@ -1,4 +1,3 @@
-import random
 import timeit
 
 import modules.blagh as x
