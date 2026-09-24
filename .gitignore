@@ -2,3 +2,4 @@
 .envrc
 markov.db
 *__pycache__
+.direnv**
