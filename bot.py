@@ -50,6 +50,7 @@ async def on_ready():
     assert client.user
     print(f"> {client.user.id}: logged in")
 
+
 # Requires #message_content intent
 @client.event
 async def on_message(message: discord.Message):
