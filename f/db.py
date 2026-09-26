@@ -4,38 +4,68 @@ from enum import Enum
 import f.sql
 
 
-class Databases(Enum):
+class Tables(Enum):
     CHAIN = "Chain"
     RESPONSE = "Response"
 
 
-def update(
-    db: Databases, word1: str | None, word2: str | None, next_word: str | None
-):
+def check_exists(
+    table: Tables,
+    word1: str | None,
+    word2: str | None,
+    next_word: str | None,
+    existing_con: sqlite3.Connection | None = None
+) -> bool:
     """
-    Updates the chosen database."""
+    Checks if a record exists in the table.
 
-    db_name: str = db.name
+    Uses an existing sqlite3 Connection if provided."""
 
-    # Connect to the db
-    con = sqlite3.connect("markov.db")
+    if not existing_con:
+        # Connect to the db
+        con = sqlite3.connect("markov.db")
+    else:
+        con = existing_con
+
     cur = con.cursor()
 
     # Check if an existing record exists
     res: sqlite3.Cursor = cur.execute(
         f"""
-        SELECT * FROM {db_name}
+        SELECT * FROM {table.name}
         WHERE {f.sql.eq("word1", word1)}
             AND {f.sql.eq("word2", word2)}
             AND {f.sql.eq("next", next_word)}""",
         f.sql.remove_none(word1, word2, next_word),
     )
 
-    if res.fetchone():
+    exists: bool = res.fetchone() is not None
+
+    if not existing_con:
+        # The connection was opened within this subroutine; close it
+        con.close()
+
+    return exists
+
+
+def update(
+    table: Tables, word1: str | None, word2: str | None, next_word: str | None
+):
+    """
+    Updates the chosen database."""
+
+    # Connect to the db
+    con = sqlite3.connect("markov.db")
+    cur = con.cursor()
+
+    # Check if an existing record exists
+    exists: bool = check_exists(table, word1, word2, next_word, con)
+
+    if exists:
         # An existing record exists; update it
         cur.execute(
             f"""
-            UPDATE {db_name}
+            UPDATE {table.name}
             SET freq = freq + 1
             WHERE {f.sql.eq("word1", word1)}
                 AND {f.sql.eq("word2", word2)}
@@ -46,7 +76,7 @@ def update(
         # Create a new record
         cur.execute(
             f"""
-            INSERT INTO {db_name}(word1, word2, next)
+            INSERT INTO {table.name}(word1, word2, next)
             VALUES(?, ?, ?)""",
             (word1, word2, next_word),
         )

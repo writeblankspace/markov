@@ -32,13 +32,15 @@ cur.execute("""
         freq INTEGER DEFAULT 1,
         CONSTRAINT pk_Chain PRIMARY KEY (word1, word2, next)
     ); """)
+# Note that word1 < word2, i.e. the words must be in alphabetical order (A < B)
 cur.execute("""
     CREATE TABLE IF NOT EXISTS Response (
         word1 TEXT,
         word2 TEXT,
         next TEXT,
         freq INTEGER DEFAULT 1,
-        CONSTRAINT pk_Response PRIMARY KEY (word1, word2, next)
+        CONSTRAINT pk_Response PRIMARY KEY (word1, word2, next),
+        CONSTRAINT chk_Words CHECK (word1 < word2)
     ); """)
 
 cur.close()
@@ -69,7 +71,7 @@ async def on_message(message: discord.Message):
             await message.channel.send("...")
     elif message.content != "":
         # Train on message
-        modules.train.train_chain(message.content)
+        modules.train.chain(message.content)
 
 
 client.run(DISCORD_TOKEN)

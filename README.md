@@ -113,14 +113,12 @@ response, but I decided to do it differently.
 > > Belike for want of rain, which I could well
 > > Beteem them from the tempest of my eyes. 
 > 
-> The 7 most important words from Lysander's dialogue, in order, are:
+> The 5 most important words from Lysander's dialogue, in order, are:
 > 1. how
 > 2. chance
 > 3. cheek
 > 4. roses
-> 5. there
-> 6. love
-> 7. why
+> 5. why
 
 We consider *combinations* of `word1` and `word2`, not *permutations*. The 
 program checks for existing records of both permutations of the words.
@@ -128,7 +126,7 @@ program checks for existing records of both permutations of the words.
 ### Extracting important words
 
 The exact code used can be found in 
-[modules.important_words.extract()](./modules/important_words.py)
+[f.important_words.extract()](./f/important_words.py).
 
 All words are stripped of extraneous symbols, and put in lowercase (while still
 considering whether it has been capitalised or not as one of the criteria).
@@ -151,20 +149,32 @@ capitalisation.
 
 ### Training
 
-Up to 5 records may be created or updated for each invoking message.
+The exact code used can be found in 
+[modules.train.response()](./modules/train.py).
 
-The important words are extracted, and added to the database.
+The 5 most important words are extracted from the invoking message.
+
+Up to 10 records may be created or updated for each invoking message, as we will
+use combinations of two words for each record (5C2 = 10).
+
+We care more about important word *combinations* than *permutations*, so
+`word1` alphabetically comes before `word2` to prevent accidental duplicates.
 
 > [!TIP]
 > Let's continue using the excerpt from *A Midsummer Night's Dream*.
 > 
 > | `word1` | `word2` | `next` | `freq` |
 > | --- | --- | --- | --- |
-> | how | chance | Belike for | 1 |
-> | how | cheek | Belike for | 1 |
-> | how | roses | Belike for | 1 |
 > | chance | cheek | Belike for | 1 |
+> | chance | how | Belike for | 1 |
 > | chance | roses | Belike for | 1 |
+> | chance | why | Belike for | 1 |
+> | cheek | how | Belike for | 1 |
+> | cheek | roses | Belike for | 1 |
+> | cheek | why | Belike for | 1 |
+> | how | roses | Belike for | 1 |
+> | how | why | Belike for | 1 |
+> | roses | why | Belike for | 1 |
 
 ### Responding
 
@@ -189,7 +199,7 @@ consideration.
 - [x] Reduce ratio to 1.5:1
     - considers `word2` matches, not just `word1` AND `word2`
 - [x] More efficient way of picking a random item based on weight
-- [ ] Use `update_db()` for both `chain` and `response`
+- [x] Use `update_db()` for both `chain` and `response`
 - [ ] Response
     - [x] Important words
     - [ ] Training
