@@ -104,8 +104,8 @@ def extract(data: str) -> list[str]:
             extracted_words.append(extracted_word)
         else:
             # It exists! Update the word's attributes
-            # Increase the weight of sufficiently long words
-            if extracted_word.get_length() >= 4:
+            # Increase the weight of sufficiently important words
+            if extracted_word.get_length() >= 4 or isupper:
                 extracted_word.inc_weight()
             # Update the uppercase status
             if isupper: extracted_word.set_upper()
