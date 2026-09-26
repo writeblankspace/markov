@@ -5,7 +5,7 @@ import discord
 from dotenv import load_dotenv
 
 import modules.blagh
-import modules.chain
+import modules.train
 
 # Get the discord token from .env
 load_dotenv()
@@ -68,7 +68,7 @@ async def on_message(message: discord.Message):
             await message.channel.send("...")
     elif message.content != "":
         # Train on message
-        modules.chain.train(message.content)
+        modules.train.train_chain(message.content)
 
 
 client.run(DISCORD_TOKEN)
