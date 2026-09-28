@@ -86,6 +86,8 @@ def extract(
         word_clean: str = re.sub(
             pattern=r"""[.,:;!?*_()\[\]`{}/"'\\]""", repl="", string=word_str
         )
+        if not word_clean:
+            word_clean = word_str
         isupper: bool = word_clean[0].isupper()  # before we .lower() it
         word_clean = word_clean.lower()
 

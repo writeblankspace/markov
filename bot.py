@@ -62,7 +62,8 @@ async def on_message(message: discord.Message):
     if message.author == client.user:
         return
 
-    if message.content.startswith("$test") or f"<@{client.user.id}>" in message.content:
+    if message.content.startswith("$test") or \
+            f"<@{client.user.id}>" in message.content:
         # Basic command
         blagh: str = modules.blagh.build([])
         if blagh:
@@ -71,7 +72,31 @@ async def on_message(message: discord.Message):
             await message.channel.send("...")
     elif message.content != "":
         # Train on message
-        modules.train.chain(message.content)
+        modules.train.chain(message.clean_content)
+
+        #TODO: enable by taking the previous message from another user
+
+        if message.type == discord.MessageType.reply:
+            # This is in reply to something
+            # So we can train the bot how to respond to messages
+
+            assert message.reference # because it is a reply
+            invoker_msg_id: int | None = message.reference.message_id
+
+            assert invoker_msg_id
+            # It is not None in this case, because message is a reply
+            # https://discordpy.readthedocs.io/en/stable/api.html?highlight=reply#discord.MessageReference.message_id
+
+            invoker: discord.Message = \
+                await message.channel.fetch_message(invoker_msg_id)
+
+            modules.train.response(
+                invoking_str=invoker.clean_content,
+                response_str=message.clean_content
+            )
+
+
+
 
 
 client.run(DISCORD_TOKEN)

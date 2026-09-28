@@ -85,5 +85,3 @@ def response(invoking_str: str, response_str: str):
                 word2=word2,
                 next_word=response
             )
-
-    # TODO: continue this.

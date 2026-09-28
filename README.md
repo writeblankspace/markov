@@ -201,8 +201,10 @@ consideration.
 - [x] More efficient way of picking a random item based on weight
 - [x] Use `update_db()` for both `chain` and `response`
 - [ ] Response
-    - [x] Important words
-    - [ ] Training
-    - [ ] Responding
+  - [x] Important words
+  - [x] Training
+  - [ ] Responding
+- [ ] Better naming for functions (functions must be verbs)
+  - [ ] `train.chain() -> training.train_chain()`
 - [ ] Set status
 - [ ] Use slash commands

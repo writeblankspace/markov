@@ -3,3 +3,4 @@
 markov.db
 *__pycache__
 .direnv**
+.zed

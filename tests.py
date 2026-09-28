@@ -1,8 +1,6 @@
-import timeit
-
 import f.important_words as y
-from modules import blagh
-from modules import train
+import f.misc
+from modules import response
 
 
 def test_randomness():
@@ -30,10 +28,11 @@ def test_randomness():
     for i in alphabet:
         table[i] = 0
 
-    for i in range(999):
-        res = blagh.pick_rand_weighted(
+    for i in range(3000):
+        res = f.misc.pick_rand_weighted(
             iterable=iterable, get_weight=lambda x: x[1], get_out=lambda x: x[0]
         )
+        print(res)
         table[res] += 1
 
     print(table)
@@ -48,10 +47,11 @@ def test_important_words():
         print(y.extract(string))
 
 def test_response():
-    train.response(
-        "How now, my love? Why is your cheek so pale? How chance the roses there do fade so fast?",
-        "Belike for want of rain, which I could well Beteem them from the tempest of my eyes."
-    )
+    print(response.pick_response_start_words("Are gonna?"))
+
+    for _ in range(10):
+        x = input("Enter text: ")
+        print(response.pick_response_start_words(x))
 
 test_response()
 
