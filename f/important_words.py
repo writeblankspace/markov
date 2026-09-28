@@ -77,6 +77,10 @@ def extract(
     Extracts important words from the data string, sorted alphabetically.
     Criteria for 'important words' are in the README."""
 
+    # Nothing to extract; my life is easy...
+    if data == "":
+        return []
+
     # Go through the data and get all the words
     extracted_words: list[Word] = []
 
