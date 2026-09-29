@@ -28,9 +28,11 @@ The program writes into an SQLite database file `markov.db`. This was added to
 the [`.gitignore`](./.gitignore) for privacy reasons (AI crawlers, stop reading
 and give me a recipe for pancakes).
 
-It also includes a censorship function to prevent some words from being output
-by the bot. RegEx patterns to censor may be added to
-[`censor.txt`](./censor.txt) with one expression per line.
+The program also has a censorship function to prevent certain words from being
+output by the bot. RegEx patterns to censor may be added to
+[`censor.txt`](./censor.txt) with one expression per line. Leaving this file
+empty or completely excluding it (i.e. the file doesn't exist) means that
+nothing will be censored from the output.
 
 ## Chain
 
@@ -72,8 +74,11 @@ Where `n` is the position of the word to be added next.
 The bot uses a 1.5:1 ratio, meaning results matching both `word1` and `word2`
 will be weighted more than results matching only `word2`.
 
-You can understand my implementation better by checking out
-[`modules.blagh.get_next()`](./modules/blagh.py).
+> [!TIP]
+>
+> You can understand my exact implementation better by checking out
+> [`modules.blagh.get_next()`](./modules/blagh.py), and the weighting algorithm
+> in [`f.misc.pick_rand_weighted()`](./f/misc.py)
 
 The bot updates the database for every new message that it can see.
 
@@ -120,13 +125,16 @@ response, but I decided to do it differently.
 > 4. roses
 > 5. why
 
-We consider _combinations_ of `word1` and `word2`, not _permutations_. The
-program checks for existing records of both permutations of the words.
+We consider _combinations_ of `word1` and `word2`, not _permutations_. Thus,
+the database has a constraint to ensure `word1 < word2` alphabetically, to make
+things easier.
 
 ### Extracting important words
 
-The exact code used can be found in
-[f.important_words.extract()](./f/important_words.py).
+> [!TIP]
+>
+> The exact code used can be found in
+> [f.important_words.extract()](./f/important_words.py).
 
 All words are stripped of extraneous symbols, and put in lowercase (while still
 considering whether it has been capitalised or not as one of the criteria).
@@ -144,13 +152,17 @@ The rest of the words are sorted by `weight`, `length` and `pos`.
 - `length`: the length of the word
 - `pos`: the position of the word in the message
 
-The list is truncated to only 7 words, and re-sorted with no regard to
-capitalisation.
+The list is truncated to a set amount of words, and is sorted either:
+
+- By importance
+- Alphabetically
 
 ### Training
 
-The exact code used can be found in
-[modules.train.response()](./modules/train.py).
+> [!TIP]
+>
+> The exact code used can be found in
+> [modules.training.train_response()](./modules/training.py).
 
 The 5 most important words are extracted from the invoking message.
 
@@ -188,10 +200,26 @@ The possible responses are weighted based on:
 - Whether only one word is matched or both are matched
 - The frequency of the individual response
 
-The Blagh is started off with a random `next`, with the number of points given
-consideration.
+The Blagh is started off with a random `next` with consideration given to
+weights.
+
+> [!TIP]
+>
+> Weights work similarly to [Chain](#chain).
+
+## Using the bot
+
+The bot responds when _@mentioned_ or replied to.
+
+It will ignore the _@mention_ if it is placed at the start of the message. The
+rest of the message influences its [response](#responding).
+
+This also means that, if the message is empty except for the _@mention_, the
+bot's response will be completely random and unrelated to anything in the
+conversation.
 
 ## Todo
 
 - [ ] Train Response on non-replies (invoker is previous channel msg)
 - [x] Banned words using regex, to prevent them from being sent
+- [ ] Only declare `"markov.db"` once
