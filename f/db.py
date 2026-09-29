@@ -9,6 +9,15 @@ class Tables(Enum):
     RESPONSE = "Response"
 
 
+def connect() -> sqlite3.Connection:
+    """
+    Connects to the database using `sqlite3.connect()`.
+
+    Using this allows the database filename to be changed in only one
+    location."""
+
+    return sqlite3.connect("markov.db")
+
 def check_exists(
     table: Tables,
     word1: str | None,
@@ -23,7 +32,7 @@ def check_exists(
 
     if not existing_con:
         # Connect to the db
-        con = sqlite3.connect("markov.db")
+        con = connect()
     else:
         con = existing_con
 
@@ -53,7 +62,7 @@ def update(table: Tables, word1: str | None, word2: str | None, next_word: str |
     Updates the chosen database."""
 
     # Connect to the db
-    con = sqlite3.connect("markov.db")
+    con = connect()
     cur = con.cursor()
 
     # Check if an existing record exists

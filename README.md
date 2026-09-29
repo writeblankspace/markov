@@ -222,4 +222,3 @@ conversation.
 
 - [ ] Train Response on non-replies (invoker is previous channel msg)
 - [x] Banned words using regex, to prevent them from being sent
-- [ ] Only declare `"markov.db"` once

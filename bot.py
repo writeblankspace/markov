@@ -4,6 +4,7 @@ import sqlite3
 import discord
 from dotenv import load_dotenv
 
+import f.db
 import f.discord_utils
 import modules.blagh
 import modules.response
@@ -21,7 +22,7 @@ intents.message_content = True
 client = discord.Client(intents=intents)
 
 # Connect to the database
-con = sqlite3.connect("markov.db")
+con = f.db.connect()
 cur = con.cursor()  # create a db cursor
 
 # Initialize db

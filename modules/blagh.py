@@ -1,5 +1,6 @@
 import sqlite3
 
+import f.db
 import f.string_utils
 import f.misc
 import f.sql
@@ -7,7 +8,7 @@ import f.sql
 
 def get_next(word1: str | None, word2: str | None) -> str | None:
     # Connect to the db
-    con = sqlite3.connect("markov.db")
+    con = f.db.connect()
     cur = con.cursor()
 
     # Get possible next words from the db

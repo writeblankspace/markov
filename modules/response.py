@@ -1,5 +1,6 @@
 import sqlite3
 
+import f.db
 import f.important_words
 import f.misc
 import f.sql
@@ -28,7 +29,7 @@ def pick_response_start_words(invoking_str: str) -> list[str]:
     # We need to fetch records that contain any combination of important words
 
     # Connect to the db
-    con = sqlite3.connect("markov.db")
+    con = f.db.connect()
     cur = con.cursor()
 
     # Get possible next words from the db
