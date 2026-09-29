@@ -92,8 +92,14 @@ def extract(
         )
         if not word_clean:
             word_clean = word_str
-        isupper: bool = word_clean[0].isupper()  # before we .lower() it
-        word_clean = word_clean.lower()
+
+        # word_clean might be "" and this might fail
+        isupper: bool
+        if len(word_clean) == 0:
+            isupper = False
+        else:
+            isupper = word_clean[0].isupper()  # before we .lower() it
+            word_clean = word_clean.lower()
 
         # Check if the word already exists in extracted_words
         extracted_word: Word | None = None

@@ -9,6 +9,10 @@ def pick_response_start_words(invoking_str: str) -> list[str]:
     """
     Picks starting words for a response based on invoking_str."""
 
+    # It's empty, so why bother?
+    if invoking_str == "":
+        return []
+
     # Extract important words from invoking_str
     important_words: list[str | None] = []
     important_words.extend(

@@ -64,19 +64,39 @@ async def on_message(message: discord.Message):
         return
 
     # TODO: replying to bot also triggers
-    if message.content.startswith("$test") or \
-            f"<@{client.user.id}>" in message.content:
-        # TODO: clean the clean_content to get rid of mention
+    if f"<@{client.user.id}>" in message.content:
+
+        msg_str: str = message.clean_content
+
+        if message.content.startswith(f"<@{client.user.id}>"):
+            # Remove bot mention from clean_content
+            display_name: str
+
+            # Get its display name if in guild
+            if message.guild:
+                client_member: discord.Member | None = \
+                    await message.guild.fetch_member(client.user.id)
+                assert client_member
+                display_name = client_member.display_name
+            else:
+                display_name = client.user.display_name
+
+            # Get rid of mention, plus leading whitespace
+            msg_str = msg_str.replace(f"@{display_name}", "", count=1).lstrip()
+
         # Pick out start words
         start_words = modules.response.pick_response_start_words(
-            invoking_str = message.clean_content
+            invoking_str = msg_str
         )
+
         # Build-a-blagh
         blagh: str = modules.blagh.build(start_words)
+
         if blagh:
             await message.reply(blagh)
         else:
             await message.reply("...")
+
     elif message.content != "":
         # Train on message (with mentions cleaned)
         modules.train.chain(message.clean_content)
