@@ -52,7 +52,17 @@ cur.close()
 @client.event
 async def on_ready():
     assert client.user
+
     print(f"> {client.user.id}: logged in")
+
+    # Change presence of bot
+    activity = discord.Activity(
+       type = discord.ActivityType.watching,
+       name = f"Ping me! @{client.user.name}",
+       state = modules.blagh.build([], censor=True)
+    )
+
+    await client.change_presence(activity=activity)
 
 
 # Requires #message_content intent
