@@ -63,8 +63,36 @@ async def on_message(message: discord.Message):
     if message.author == client.user:
         return
 
-    # TODO: replying to bot also triggers
+    # Get the message that the message is replying to, if any
+    replied_message: discord.Message | None
+
+    if message.type == discord.MessageType.reply:
+        assert message.reference # because it is a reply
+        replied_message_id: int | None = message.reference.message_id
+
+        assert replied_message_id
+        # It is not None in this case, because message is a reply
+        # https://discordpy.readthedocs.io/en/stable/api.html?highlight=reply#discord.MessageReference.message_id
+
+        replied_message = await message.channel.fetch_message(replied_message_id)
+    else:
+        replied_message = None
+
+
+    # Set the flag for whether or not the bot's triggers are invoked
+    triggered: bool = False
+
     if f"<@{client.user.id}>" in message.content:
+        # The bot was mentioned
+        triggered = True
+    elif replied_message and replied_message.author.id == client.user.id:
+        # The bot was replied to
+        triggered = True
+
+
+    # TODO: put all these into functions
+    if triggered:
+        await message.channel.typing()
 
         msg_str: str = message.clean_content
 
@@ -101,24 +129,13 @@ async def on_message(message: discord.Message):
         # Train on message (with mentions cleaned)
         modules.train.chain(message.clean_content)
 
-        #TODO: enable by taking the previous message from another user
-
-        if message.type == discord.MessageType.reply:
+        #TODO: move reply stuff up and make it a flag so it may be reused
+        if replied_message:
             # This is in reply to something
             # So we can train the bot how to respond to messages
 
-            assert message.reference # because it is a reply
-            invoker_msg_id: int | None = message.reference.message_id
-
-            assert invoker_msg_id
-            # It is not None in this case, because message is a reply
-            # https://discordpy.readthedocs.io/en/stable/api.html?highlight=reply#discord.MessageReference.message_id
-
-            invoker: discord.Message = \
-                await message.channel.fetch_message(invoker_msg_id)
-
             modules.train.response(
-                invoking_str=invoker.clean_content,
+                invoking_str=replied_message.clean_content,
                 response_str=message.clean_content
             )
 

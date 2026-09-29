@@ -201,6 +201,7 @@ consideration.
   - [x] Important words
   - [x] Training
   - [ ] Responding
+- [ ] Train Response on non-replies (invoker is previous channel msg)
 - [ ] Better naming for functions (functions must be verbs)
   - [ ] `train.chain() -> training.train_chain()`
 - [ ] Set status
