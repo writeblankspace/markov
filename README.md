@@ -209,5 +209,4 @@ consideration.
   - [x] `train.chain() -> training.train_chain()`
 - [ ] Train Response on non-replies (invoker is previous channel msg)
 - [ ] Set status
-- [ ] Banned words using regex, to prevent training (convert into hashtags like Roblox)
-- [ ] Clean messages manually (@mentions, @here, @everyone &role-mentions, #channel-mentions)
+- [X] Banned words using regex, to prevent them from being sent

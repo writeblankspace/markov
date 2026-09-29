@@ -4,6 +4,7 @@ import sqlite3
 import discord
 from dotenv import load_dotenv
 
+import f.string_utils
 import modules.blagh
 import modules.response
 import modules.training
@@ -93,33 +94,26 @@ async def on_message(message: discord.Message):
     if triggered:
         await message.channel.typing()
 
-        msg_str: str = message.clean_content
+        msg_str: str = message.content
 
-        if message.content.startswith(f"<@{client.user.id}>"):
-            # Remove bot mention from clean_content
-            display_name: str
-
-            # Get its display name if in guild
-            if message.guild:
-                client_member: discord.Member | None = await message.guild.fetch_member(
-                    client.user.id
-                )
-                assert client_member
-                display_name = client_member.display_name
-            else:
-                display_name = client.user.display_name
-
+        if msg_str.startswith(f"<@{client.user.id}>"):
             # Get rid of mention, plus leading whitespace
-            msg_str = msg_str.replace(f"@{display_name}", "", count=1).lstrip()
+            msg_str = msg_str.replace(f"<@{client.user.id}>", "", count=1).lstrip()
+
+        print(msg_str)
 
         # Pick out start words
         start_words = modules.response.pick_response_start_words(invoking_str=msg_str)
 
         # Build-a-blagh
         blagh: str = modules.blagh.build(start_words)
+        blagh = f.string_utils.censor(blagh)
 
         if blagh:
-            await message.reply(blagh)
+            await message.reply(
+                blagh,
+                allowed_mentions = discord.AllowedMentions.none()
+            )
         else:
             await message.reply("...")
 

@@ -1,5 +1,3 @@
-import re
-
 import f.important_words
 from f import db
 
@@ -22,10 +20,6 @@ def train_chain(data_str: str):
 
     # Start at the first not-None item, i.e. index 2
     for i in range(2, len(data_list)):
-        # Sanitise user, role and everyone mentions
-        if re.fullmatch(pattern=r"<@&?\d{0,20}>|@everyone", string=data_list[i] or ""):
-            data_list[i] = "@mention"
-
         # Add the word to the database
         db.update(
             table=db.Tables.CHAIN,

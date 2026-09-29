@@ -1,9 +1,5 @@
 import re
 
-import discord
-
-# Functions for cleaning up strings before processing
-
 
 def censor(string: str) -> str:
     """
@@ -32,9 +28,3 @@ def censor(string: str) -> str:
         )
 
     return res
-
-
-def sanitize(message: discord.Message) -> str:
-    """
-    Sanitizes mentions from the message content and returns it."""
-    return ""
