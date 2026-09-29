@@ -14,7 +14,7 @@ def check_exists(
     word1: str | None,
     word2: str | None,
     next_word: str | None,
-    existing_con: sqlite3.Connection | None = None
+    existing_con: sqlite3.Connection | None = None,
 ) -> bool:
     """
     Checks if a record exists in the table.
@@ -48,9 +48,7 @@ def check_exists(
     return exists
 
 
-def update(
-    table: Tables, word1: str | None, word2: str | None, next_word: str | None
-):
+def update(table: Tables, word1: str | None, word2: str | None, next_word: str | None):
     """
     Updates the chosen database."""
 
