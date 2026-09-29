@@ -14,17 +14,23 @@ def get_next(word1: str | None, word2: str | None) -> str | None:
     # If word1 is also a match, triple the frequency
     res: sqlite3.Cursor = cur.execute(
         f"""
-        SELECT
-            next,
-            IF({f.sql.eq("word1", word1)}, freq*3, freq)
-        FROM Chain
-        WHERE {f.sql.eq("word2", word2)}""",
+        WITH t AS (
+            SELECT
+                next,
+                IF({f.sql.eq("word1", word1)}, freq*3, freq) AS weight
+            FROM Chain
+            WHERE {f.sql.eq("word2", word2)}
+        )
+        SELECT next, SUM(weight) FROM t
+        GROUP BY next""",
         f.sql.remove_none(word1, word2),
     )
 
+    res_list: list = res.fetchall()  # in case I need to print() it
+
     # Pick a random next word
     next_word: str | None = f.misc.pick_rand_weighted(
-        iterable=res.fetchall(), get_weight=lambda x: x[1], get_out=lambda x: x[0]
+        iterable=res_list, get_weight=lambda x: x[1], get_out=lambda x: x[0]
     )
 
     con.close()  # close db connection
