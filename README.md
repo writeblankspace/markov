@@ -196,17 +196,5 @@ consideration.
 
 ## Todo
 
-- [x] Ignore @mentions, @everyone and URLs
-- [x] Reduce ratio to 1.5:1
-    - considers `word2` matches, not just `word1` AND `word2`
-- [x] More efficient way of picking a random item based on weight
-- [x] Use `update_db()` for both `chain` and `response`
-- [x] Response
-  - [x] Important words
-  - [x] Training
-  - [x] Responding
-- [x] Better naming for functions (functions must be verbs)
-  - [x] `train.chain() -> training.train_chain()`
 - [ ] Train Response on non-replies (invoker is previous channel msg)
-- [ ] Set status
-- [X] Banned words using regex, to prevent them from being sent
+- [x] Banned words using regex, to prevent them from being sent
