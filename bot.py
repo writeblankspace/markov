@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 
 import modules.blagh
 import modules.response
-import modules.train
+import modules.training
 
 # Get the discord token from .env
 load_dotenv()
@@ -66,8 +66,9 @@ async def on_message(message: discord.Message):
     # Get the message that the message is replying to, if any
     replied_message: discord.Message | None
 
+    # TODO: async def get_replied_message(message) -> discord.Message | None
     if message.type == discord.MessageType.reply:
-        assert message.reference # because it is a reply
+        assert message.reference  # because it is a reply
         replied_message_id: int | None = message.reference.message_id
 
         assert replied_message_id
@@ -78,7 +79,6 @@ async def on_message(message: discord.Message):
     else:
         replied_message = None
 
-
     # Set the flag for whether or not the bot's triggers are invoked
     triggered: bool = False
 
@@ -88,7 +88,6 @@ async def on_message(message: discord.Message):
     elif replied_message and replied_message.author.id == client.user.id:
         # The bot was replied to
         triggered = True
-
 
     # TODO: put all these into functions
     if triggered:
@@ -102,8 +101,9 @@ async def on_message(message: discord.Message):
 
             # Get its display name if in guild
             if message.guild:
-                client_member: discord.Member | None = \
-                    await message.guild.fetch_member(client.user.id)
+                client_member: discord.Member | None = await message.guild.fetch_member(
+                    client.user.id
+                )
                 assert client_member
                 display_name = client_member.display_name
             else:
@@ -113,9 +113,7 @@ async def on_message(message: discord.Message):
             msg_str = msg_str.replace(f"@{display_name}", "", count=1).lstrip()
 
         # Pick out start words
-        start_words = modules.response.pick_response_start_words(
-            invoking_str = msg_str
-        )
+        start_words = modules.response.pick_response_start_words(invoking_str=msg_str)
 
         # Build-a-blagh
         blagh: str = modules.blagh.build(start_words)
@@ -127,20 +125,16 @@ async def on_message(message: discord.Message):
 
     elif message.content != "":
         # Train on message (with mentions cleaned)
-        modules.train.chain(message.clean_content)
+        modules.training.train_chain(message.clean_content)
 
-        #TODO: move reply stuff up and make it a flag so it may be reused
         if replied_message:
             # This is in reply to something
             # So we can train the bot how to respond to messages
 
-            modules.train.response(
+            modules.training.train_response(
                 invoking_str=replied_message.clean_content,
-                response_str=message.clean_content
+                response_str=message.clean_content,
             )
-
-
-
 
 
 client.run(DISCORD_TOKEN)

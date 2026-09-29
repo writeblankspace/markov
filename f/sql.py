@@ -1,6 +1,7 @@
 # Functions used to build the SQL query
 # with respect to NULL
 
+
 def eq(column: str, word: str | None) -> str:
     if word:
         return f"{column} = ?"
@@ -8,8 +9,10 @@ def eq(column: str, word: str | None) -> str:
         # word is None
         return f"{column} IS NULL"
 
-def value_list(len: int) -> str:
+
+def fmt_value_list(len: int) -> str:
     return ", ".join("?" for _ in range(len))
+
 
 # Get rid of None in data
 def remove_none(*data: str | None) -> tuple[str, ...]:

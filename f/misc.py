@@ -3,6 +3,7 @@ from collections.abc import Callable
 
 # Miscellaneous algorithm functions
 
+
 def binary_search_cum_freq(cum_freqs: list[int], key: int) -> int | None:
     """
     Returns the index where `key` fits in for a sorted cumulative frequency list
@@ -45,14 +46,13 @@ def binary_search_cum_freq(cum_freqs: list[int], key: int) -> int | None:
             end = mid - 1
 
     # Not found; we shouldn't get this result if all went well
-    #TODO: "Create your own exception," my linter says
-    raise Exception("This shouldn't happen.")
+    assert found(mid), "The index should be found by now."
 
 
 def pick_rand_weighted(
     iterable: list[tuple],
     get_weight: Callable[[tuple], int],
-    get_out: Callable[[tuple], str]
+    get_out: Callable[[tuple], str],
 ) -> str | None:
     """
     Picks out a random element from `iterable`.

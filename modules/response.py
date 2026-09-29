@@ -35,16 +35,14 @@ def pick_response_start_words(invoking_str: str) -> list[str]:
     #
     # For a particular match where word1Match and word2Match, weight = freq * 3
     # Otherwise (i.e. only one match), weight = freq
-    #
-    # Freq is
 
     res: sqlite3.Cursor = cur.execute(
         f"""
         WITH t AS (
             SELECT
                 next,
-                word1 IN ({f.sql.value_list(len(important_words))}) AS word1Match,
-                word2 IN ({f.sql.value_list(len(important_words))}) AS word2Match,
+                word1 IN ({f.sql.fmt_value_list(len(important_words))}) AS word1Match,
+                word2 IN ({f.sql.fmt_value_list(len(important_words))}) AS word2Match,
                 freq
             FROM Response
             WHERE word1Match OR word2Match
@@ -58,7 +56,7 @@ def pick_response_start_words(invoking_str: str) -> list[str]:
         important_words * 2,
     )
 
-    res_list: list = res.fetchall() # in case I need to print() it
+    res_list: list = res.fetchall()  # in case I need to print() it
 
     start_words: str | None = f.misc.pick_rand_weighted(
         iterable=res_list, get_weight=lambda x: x[1], get_out=lambda x: x[0]

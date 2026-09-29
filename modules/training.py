@@ -4,7 +4,7 @@ import f.important_words
 from f import db
 
 
-def chain(data_str: str):
+def train_chain(data_str: str):
     """
     Parses the message data and adds it to the Chain database."""
 
@@ -35,7 +35,7 @@ def chain(data_str: str):
         )
 
 
-def response(invoking_str: str, response_str: str):
+def train_response(invoking_str: str, response_str: str):
     """
     Adds stuff to the Response database.
 
@@ -80,8 +80,5 @@ def response(invoking_str: str, response_str: str):
             # and the TABLE Response has a constraint to ensure word1 < word2
             # so we needn't worry about different permuations existing
             db.update(
-                table=db.Tables.RESPONSE,
-                word1=word1,
-                word2=word2,
-                next_word=response
+                table=db.Tables.RESPONSE, word1=word1, word2=word2, next_word=response
             )

@@ -197,12 +197,13 @@ consideration.
     - considers `word2` matches, not just `word1` AND `word2`
 - [x] More efficient way of picking a random item based on weight
 - [x] Use `update_db()` for both `chain` and `response`
-- [ ] Response
+- [x] Response
   - [x] Important words
   - [x] Training
-  - [ ] Responding
+  - [x] Responding
+- [x] Better naming for functions (functions must be verbs)
+  - [x] `train.chain() -> training.train_chain()`
 - [ ] Train Response on non-replies (invoker is previous channel msg)
-- [ ] Better naming for functions (functions must be verbs)
-  - [ ] `train.chain() -> training.train_chain()`
 - [ ] Set status
-- [ ] Use slash commands
+- [ ] Banned words using regex, to prevent training (convert into hashtags like Roblox)
+- [ ] Clean messages manually (@mentions, @here, @everyone &role-mentions, #channel-mentions)
