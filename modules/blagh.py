@@ -30,12 +30,13 @@ def get_next(word1: str | None, word2: str | None) -> str | None:
     return next_word
 
 
-def build(start_words: list[str | None]) -> str:
+def build(start_words: list[str]) -> str:
     """
     Builds a blagh which starts with `start_words`."""
 
     # See README to see what a blagh is
-    blagh: list[str | None] = start_words
+    blagh: list[str | None] = []
+    blagh.extend(start_words)
 
     # To make our lives easier. See README
     blagh.insert(0, None)

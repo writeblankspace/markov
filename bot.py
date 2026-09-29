@@ -5,6 +5,7 @@ import discord
 from dotenv import load_dotenv
 
 import modules.blagh
+import modules.response
 import modules.train
 
 # Get the discord token from .env
@@ -62,16 +63,22 @@ async def on_message(message: discord.Message):
     if message.author == client.user:
         return
 
+    # TODO: replying to bot also triggers
     if message.content.startswith("$test") or \
             f"<@{client.user.id}>" in message.content:
-        # Basic command
-        blagh: str = modules.blagh.build([])
+        # TODO: clean the clean_content to get rid of mention
+        # Pick out start words
+        start_words = modules.response.pick_response_start_words(
+            invoking_str = message.clean_content
+        )
+        # Build-a-blagh
+        blagh: str = modules.blagh.build(start_words)
         if blagh:
-            await message.channel.send(blagh)
+            await message.reply(blagh)
         else:
-            await message.channel.send("...")
+            await message.reply("...")
     elif message.content != "":
-        # Train on message
+        # Train on message (with mentions cleaned)
         modules.train.chain(message.clean_content)
 
         #TODO: enable by taking the previous message from another user
