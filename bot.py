@@ -4,6 +4,7 @@ import sqlite3
 import discord
 from dotenv import load_dotenv
 
+import f.discord_utils
 import f.string_utils
 import modules.blagh
 import modules.response
@@ -66,19 +67,7 @@ async def on_message(message: discord.Message):
 
     # Get the message that the message is replying to, if any
     replied_message: discord.Message | None
-
-    # TODO: async def get_replied_message(message) -> discord.Message | None
-    if message.type == discord.MessageType.reply:
-        assert message.reference  # because it is a reply
-        replied_message_id: int | None = message.reference.message_id
-
-        assert replied_message_id
-        # It is not None in this case, because message is a reply
-        # https://discordpy.readthedocs.io/en/stable/api.html?highlight=reply#discord.MessageReference.message_id
-
-        replied_message = await message.channel.fetch_message(replied_message_id)
-    else:
-        replied_message = None
+    replied_message = await f.discord_utils.get_replied_message(message)
 
     # Set the flag for whether or not the bot's triggers are invoked
     triggered: bool = False
@@ -100,8 +89,6 @@ async def on_message(message: discord.Message):
             # Get rid of mention, plus leading whitespace
             msg_str = msg_str.replace(f"<@{client.user.id}>", "", count=1).lstrip()
 
-        print(msg_str)
-
         # Pick out start words
         start_words = modules.response.pick_response_start_words(invoking_str=msg_str)
 
@@ -110,10 +97,7 @@ async def on_message(message: discord.Message):
         blagh = f.string_utils.censor(blagh)
 
         if blagh:
-            await message.reply(
-                blagh,
-                allowed_mentions = discord.AllowedMentions.none()
-            )
+            await message.reply(blagh, allowed_mentions=discord.AllowedMentions.none())
         else:
             await message.reply("...")
 
