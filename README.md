@@ -183,12 +183,9 @@ The important words are extracted from the invoking message.
 The program will search for records containing the most important word or the 
 2nd most important word.
 
-These are then given points based on:
-- Whether the `word_` matches the most important word or the 2nd most important 
-  word
-- Whether or not the other `word_` in the record matches any of the other 
-  important words
-- The frequency of the response
+The possible responses are weighted based on:
+- Whether only one word is matched or both are matched
+- The frequency of the individual response
 
 The Blagh is started off with a random `next`, with the number of points given 
 consideration.
