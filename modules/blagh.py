@@ -1,5 +1,6 @@
 import sqlite3
 
+import f.string_utils
 import f.misc
 import f.sql
 
@@ -30,7 +31,7 @@ def get_next(word1: str | None, word2: str | None) -> str | None:
     return next_word
 
 
-def build(start_words: list[str]) -> str:
+def build(start_words: list[str], censor: bool = False) -> str:
     """
     Builds a blagh which starts with `start_words`."""
 
@@ -56,4 +57,7 @@ def build(start_words: list[str]) -> str:
         n += 1
 
     # We have a blagh!
-    return " ".join([x if x else "" for x in blagh])
+    blagh_str = " ".join([x if x else "" for x in blagh])
+    if censor: blagh_str = f.string_utils.censor(blagh_str)
+
+    return blagh_str

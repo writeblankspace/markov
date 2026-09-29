@@ -5,7 +5,6 @@ import discord
 from dotenv import load_dotenv
 
 import f.discord_utils
-import f.string_utils
 import modules.blagh
 import modules.response
 import modules.training
@@ -93,8 +92,7 @@ async def on_message(message: discord.Message):
         start_words = modules.response.pick_response_start_words(invoking_str=msg_str)
 
         # Build-a-blagh
-        blagh: str = modules.blagh.build(start_words)
-        blagh = f.string_utils.censor(blagh)
+        blagh: str = modules.blagh.build(start_words, censor=True)
 
         if blagh:
             await message.reply(blagh, allowed_mentions=discord.AllowedMentions.none())
