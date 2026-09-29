@@ -1,0 +1,2 @@
+\$TEST-CENSOR-THIS\$
+retard(s|ed)?

@@ -1,5 +1,6 @@
 import f.important_words as y
 import f.misc
+import f.string_utils
 from modules import response
 
 
@@ -53,6 +54,12 @@ def test_response():
         x = input("Enter text: ")
         print(response.pick_response_start_words(x))
 
-test_response()
+def test_censor():
+    string = "Why do stars suddenly apPear everytime you are near?"
+    print(string)
+    print(f.string_utils.censor(string))
+
+
+test_censor()
 
 print("Done.")
