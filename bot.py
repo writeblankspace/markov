@@ -1,5 +1,4 @@
 import os
-import sqlite3
 
 import discord
 from dotenv import load_dotenv
@@ -105,8 +104,15 @@ async def on_message(message: discord.Message):
         # Build-a-blagh
         blagh: str = modules.blagh.build(start_words, censor=True)
 
+        allowed_mentions: discord.AllowedMentions = discord.AllowedMentions(
+            everyone=False,
+            users=False,
+            roles=False,
+            replied_user=True
+        )
+
         if blagh:
-            await message.reply(blagh, allowed_mentions=discord.AllowedMentions.none())
+            await message.reply(blagh, allowed_mentions=allowed_mentions)
         else:
             await message.reply("...")
 
