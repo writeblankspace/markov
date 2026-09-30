@@ -1,5 +1,7 @@
 import re
 
+import f.config
+
 
 def censor(string: str) -> str:
     """
@@ -8,11 +10,12 @@ def censor(string: str) -> str:
     Regular expressions to censor must be in `./censor.txt`, with one expression
     per line."""
 
+    censor_path: str = f.config.config.get_censor_path()
     res: str = string
 
     # Open the file of regular expressions
     try:
-        with open("./censor.txt", "r") as file:
+        with open(censor_path, "r") as file:
             patterns: list[str] = file.readlines()
     except FileNotFoundError:
         # The file doesn't exist

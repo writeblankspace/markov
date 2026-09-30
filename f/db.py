@@ -1,6 +1,7 @@
 import sqlite3
 from enum import Enum
 
+import f.config
 import f.sql
 
 
@@ -16,7 +17,9 @@ def connect() -> sqlite3.Connection:
     Using this allows the database filename to be changed in only one
     location."""
 
-    return sqlite3.connect("markov.db")
+    db_path: str = f.config.config.get_db_path()
+
+    return sqlite3.connect(db_path)
 
 def check_exists(
     table: Tables,

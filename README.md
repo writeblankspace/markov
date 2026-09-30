@@ -17,7 +17,7 @@ A Blagh:
 I am programming this on NixOS, so you will find a list of dependencies in
 [`shell.nix`](./shell.nix).
 
-This project requires a Discord bot token in env:
+This project requires a Discord bot token as an environment variable:
 
 ```shell
 # ./.env
@@ -33,6 +33,14 @@ output by the bot. RegEx patterns to censor may be added to
 [`censor.txt`](./censor.txt) with one expression per line. Leaving this file
 empty or completely excluding it (i.e. the file doesn't exist) means that
 nothing will be censored from the output.
+
+You can change these two default paths using environment variables:
+
+```shell
+# ./.env
+export CENSOR_PATH="./censor.txt"
+export DB_PATH="./markov.db"
+```
 
 ## Chain
 
